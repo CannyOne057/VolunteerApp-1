@@ -1,6 +1,7 @@
 package com.example.cc_3.volunteerapp;
 
 import android.content.Intent;
+import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,15 +12,21 @@ import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.ResultCodes;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 123;
+    FirebaseDatabase mDatabase;
+    CommunityFragment mCommunityFragment;
+    FragmentTransaction mFragmentTransaction;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mDatabase = FirebaseDatabase.getInstance();
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         // This checks to see if someone is logged in.
@@ -33,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
                     AuthUI.getInstance().createSignInIntentBuilder().build(),
                     RC_SIGN_IN);
         }
+        mCommunityFragment = new CommunityFragment();
+        mFragmentTransaction = getFragmentManager().beginTransaction();
+        mFragmentTransaction.replace(R.id.fragment_container, mCommunityFragment);
+        mFragmentTransaction.commit();
     }
 
     /**
